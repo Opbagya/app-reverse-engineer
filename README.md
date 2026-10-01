@@ -16,6 +16,12 @@
   <img src="https://img.shields.io/badge/Agent-Antigravity%20%7C%20Claude%20%7C%20Cursor-purple.svg" alt="Platform Support" />
 </p>
 
+<p align="center">
+  <a href="https://opbagya.github.io/app-reverse-engineer/">
+    <img src="https://img.shields.io/badge/Live%20Demo-Try%20Sahara%20Web-orange?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Demo" />
+  </a>
+</p>
+
 ---
 
 ## ⚡ Overview
