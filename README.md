@@ -2,6 +2,10 @@
   <img src="./assets/banner.jpg" alt="App Reverse Engineer 3-Step Flow Banner" width="100%" />
 </p>
 
+<p align="center">
+  <img src="./assets/logo.png" alt="App Reverse Engineer Logo" width="88" height="88" />
+</p>
+
 <h1 align="center">App Reverse Engineer</h1>
 
 <p align="center">
