@@ -16,16 +16,16 @@
 </p>
 
 <p align="center">
+  <a href="https://opbagya.github.io/app-reverse-engineer/instagram/">
+    <img src="https://img.shields.io/badge/Live%20Demo%201-Instagram%20Mobile-e4405f?style=for-the-badge&logo=instagram&logoColor=white" alt="Live Demo 1 Instagram Mobile" />
+  </a>
+  &nbsp;
   <a href="https://opbagya.github.io/app-reverse-engineer/">
-    <img src="https://img.shields.io/badge/Live%20Demo%201-Try%20Sahara%20(Amazon)-orange?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Demo Sahara" />
+    <img src="https://img.shields.io/badge/Live%20Demo%202-Try%20Sahara%20(Amazon)-orange?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Demo 2 Sahara" />
   </a>
   &nbsp;
   <a href="https://opbagya.github.io/app-reverse-engineer/lootify/">
-    <img src="https://img.shields.io/badge/Live%20Demo%202-Try%20Lootify%20(Spotify)-1ed760?style=for-the-badge&logo=spotify&logoColor=white" alt="Live Demo Lootify" />
-  </a>
-  &nbsp;
-  <a href="https://opbagya.github.io/app-reverse-engineer/instagram/">
-    <img src="https://img.shields.io/badge/Live%20Demo%203-Instagram%20Mobile-e4405f?style=for-the-badge&logo=instagram&logoColor=white" alt="Live Demo Instagram Mobile" />
+    <img src="https://img.shields.io/badge/Live%20Demo%203-Try%20Lootify%20(Spotify)-1ed760?style=for-the-badge&logo=spotify&logoColor=white" alt="Live Demo 3 Lootify" />
   </a>
 </p>
 
@@ -86,39 +86,9 @@ Use app-reverse-engineer on [App Name] to build [Your Idea]
 
 ## 🌟 Live Proof: See What 1 Sentence Can Build
 
-Here are two complete, production-grade web applications built with **just one sentence each**:
+Here are three complete, production-grade applications built with **just one sentence each**:
 
-### Demonstration 1: "Sahara" (Amazon Reverse-Engineered)
-👉 **[Click Here to Test the Live Sahara Webapp](https://opbagya.github.io/app-reverse-engineer/)**
-
-* **The Prompt:**
-  ```text
-  using this skill of app reverse engineer, build me exact copy of amazon but name it "sahara"
-  ```
-* **What the AI Did Autonomously:**
-  1. Found Amazon's official App Store screenshots online.
-  2. Extracted the exact navy (`#131921`), gold (`#febd69`), and deal red (`#cc0c39`) tokens.
-  3. Built an interactive e-commerce store with omnibox search, 4-quadrant bento cards, countdown deals, a working shopping cart, and a floating **Dune AI** shopping assistant.
-* **Code folder:** [`examples/sahara/`](./examples/sahara/)
-
----
-
-### Demonstration 2: "Lootify" (Spotify Reverse-Engineered)
-👉 **[Click Here to Test the Live Lootify Webapp](https://opbagya.github.io/app-reverse-engineer/lootify/)**
-
-* **The Prompt:**
-  ```text
-  using this skill of app reverse engineer, build me exact copy of spotify but name it "lootify"
-  ```
-* **What the AI Did Autonomously:**
-  1. Found Spotify's official mobile screenshots on the Play Store CDN.
-  2. Extracted the obsidian black (`#121212`) and neon green (`#1ed760`) design tokens.
-  3. Built a fully interactive dark-mode music player with a left library sidebar, hover-reveal green play buttons, live Web Audio ambient synth sound preview, play queue, and scrubbable progress bar.
-* **Code folder:** [`examples/lootify/`](./examples/lootify/)
-
----
-
-### Demonstration 3: Instagram Mobile Experience (App Reverse-Engineered)
+### Demonstration 1: Instagram Mobile Experience (App Reverse-Engineered)
 👉 **[Click Here to Test the Live Instagram Mobile Webapp](https://opbagya.github.io/app-reverse-engineer/instagram/)**
 
 * **The Prompt:**
@@ -136,6 +106,36 @@ Here are two complete, production-grade web applications built with **just one s
      - 🎛️ **Full 4-Tab Navigation**: Home Feed, 3-Column Explore Grid, Full-Height Vertical Reels with spinning audio disc, and User Profile.
      - 🌓 **Dark / Light Mode**: Smooth toggle between clean white and AMOLED black.
 * **Code folder:** [`examples/instagram-mobile/`](./examples/instagram-mobile/)
+
+---
+
+### Demonstration 2: "Sahara" (Amazon Reverse-Engineered)
+👉 **[Click Here to Test the Live Sahara Webapp](https://opbagya.github.io/app-reverse-engineer/)**
+
+* **The Prompt:**
+  ```text
+  using this skill of app reverse engineer, build me exact copy of amazon but name it "sahara"
+  ```
+* **What the AI Did Autonomously:**
+  1. Found Amazon's official App Store screenshots online.
+  2. Extracted the exact navy (`#131921`), gold (`#febd69`), and deal red (`#cc0c39`) tokens.
+  3. Built an interactive e-commerce store with omnibox search, 4-quadrant bento cards, countdown deals, a working shopping cart, and a floating **Dune AI** shopping assistant.
+* **Code folder:** [`examples/sahara/`](./examples/sahara/)
+
+---
+
+### Demonstration 3: "Lootify" (Spotify Reverse-Engineered)
+👉 **[Click Here to Test the Live Lootify Webapp](https://opbagya.github.io/app-reverse-engineer/lootify/)**
+
+* **The Prompt:**
+  ```text
+  using this skill of app reverse engineer, build me exact copy of spotify but name it "lootify"
+  ```
+* **What the AI Did Autonomously:**
+  1. Found Spotify's official mobile screenshots on the Play Store CDN.
+  2. Extracted the obsidian black (`#121212`) and neon green (`#1ed760`) design tokens.
+  3. Built a fully interactive dark-mode music player with a left library sidebar, hover-reveal green play buttons, live Web Audio ambient synth sound preview, play queue, and scrubbable progress bar.
+* **Code folder:** [`examples/lootify/`](./examples/lootify/)
 
 ---
 
