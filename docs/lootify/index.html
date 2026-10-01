@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lootify - Web Player: Music for everyone</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22%231ed760%22/><path d=%22M25 40 Q 50 32 75 42 M28 52 Q 50 46 72 54 M32 64 Q 50 60 68 66%22 stroke=%22%23121212%22 stroke-width=%228%22 stroke-linecap=%22round%22 fill=%22none%22/></svg>">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            lootify: {
+              black: '#121212',
+              dark: '#090909',
+              card: '#181818',
+              cardHover: '#282828',
+              green: '#1ed760',
+              greenHover: '#1fdf64',
+              subtext: '#b3b3b3',
+              border: 'rgba(255,255,255,0.07)',
+            }
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"Circular Std"', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Spotify custom scrollbars & audio sliders */
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.25);
+      border-radius: 8px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.4);
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Wave visualizer animation */
+    @keyframes bounceWave {
+      0%, 100% { height: 4px; }
+      50% { height: 16px; }
+    }
+    .wave-bar {
+      animation: bounceWave 1.2s infinite ease-in-out;
+    }
+    .wave-bar:nth-child(2) { animation-delay: 0.2s; }
+    .wave-bar:nth-child(3) { animation-delay: 0.4s; }
+    .wave-bar:nth-child(4) { animation-delay: 0.1s; }
+  </style>
+</head>
+<body class="bg-black text-white font-sans antialiased h-screen overflow-hidden flex flex-col select-none">
+
+  <!-- ==================== APP SHELL ==================== -->
+  <div class="flex-1 flex overflow-hidden p-2 gap-2">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="w-64 md:w-72 lg:w-80 flex flex-col gap-2 flex-shrink-0">
+      
+      <!-- Top Nav Card -->
+      <div class="bg-lootify-black rounded-lg p-4 space-y-4">
+        <!-- Logo -->
+        <a href="#" class="flex items-center gap-2 px-1 text-white font-black text-xl tracking-tight">
+          <svg class="w-8 h-8 fill-lootify-green" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="46" fill="#1ed760"/>
+            <path d="M25 38 Q 50 30 75 40" stroke="#121212" stroke-width="8" stroke-linecap="round" fill="none"/>
+            <path d="M28 50 Q 50 44 72 52" stroke="#121212" stroke-width="7" stroke-linecap="round" fill="none"/>
+            <path d="M32 62 Q 50 58 68 64" stroke="#121212" stroke-width="6" stroke-linecap="round" fill="none"/>
+          </svg>
+          <span class="text-2xl font-black">Lootify</span>
+        </a>
+
+        <!-- Navigation Links -->
+        <nav class="space-y-1 font-bold text-sm">
+          <button onclick="navigateTab('home')" class="w-full flex items-center gap-4 px-2 py-2.5 rounded text-white hover:text-white transition-colors">
+            <i data-lucide="home" class="w-6 h-6"></i>
+            <span>Home</span>
+          </button>
+          <button onclick="navigateTab('search')" class="w-full flex items-center gap-4 px-2 py-2.5 rounded text-lootify-subtext hover:text-white transition-colors">
+            <i data-lucide="search" class="w-6 h-6"></i>
+            <span>Search</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Library Card -->
+      <div class="bg-lootify-black rounded-lg flex-1 p-3 flex flex-col overflow-hidden">
+        <div class="flex items-center justify-between px-2 py-2 text-lootify-subtext hover:text-white transition-colors cursor-pointer">
+          <div class="flex items-center gap-2.5 font-bold text-sm">
+            <i data-lucide="library" class="w-6 h-6"></i>
+            <span>Your Library</span>
+          </div>
+          <button onclick="showToast('Created new playlist!')" class="p-1 hover:bg-white/10 rounded-full transition-colors">
+            <i data-lucide="plus" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Filter Pills -->
+        <div class="flex gap-2 px-1 py-2 overflow-x-auto no-scrollbar text-xs font-semibold">
+          <button onclick="filterLibrary('all')" class="bg-white/10 hover:bg-white/15 px-3 py-1.5 rounded-full transition-colors">Playlists</button>
+          <button onclick="filterLibrary('artists')" class="bg-white/10 hover:bg-white/15 px-3 py-1.5 rounded-full transition-colors">Artists</button>
+          <button onclick="filterLibrary('podcasts')" class="bg-white/10 hover:bg-white/15 px-3 py-1.5 rounded-full transition-colors">Podcasts</button>
+        </div>
+
+        <!-- Playlists List -->
+        <div id="libraryList" class="flex-1 overflow-y-auto space-y-1 pt-2 pr-1">
+          <!-- Injected via JavaScript -->
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN VIEW AREA -->
+    <main class="flex-1 bg-lootify-black rounded-lg overflow-y-auto relative flex flex-col">
+      
+      <!-- Top Sticky Bar -->
+      <header class="sticky top-0 z-30 px-6 py-4 flex items-center justify-between bg-black/40 backdrop-blur-md">
+        <!-- History Controls -->
+        <div class="flex items-center gap-2">
+          <button class="w-8 h-8 rounded-full bg-black/70 flex items-center justify-center text-white/60 hover:text-white transition-colors">
+            <i data-lucide="chevron-left" class="w-5 h-5"></i>
+          </button>
+          <button class="w-8 h-8 rounded-full bg-black/70 flex items-center justify-center text-white/60 hover:text-white transition-colors">
+            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+          </button>
+
+          <!-- Search Input in Header (When on Search tab or active) -->
+          <div id="headerSearchBox" class="ml-4 relative hidden sm:block">
+            <i data-lucide="search" class="w-4 h-4 text-lootify-subtext absolute left-3 top-1/2 -translate-y-1/2"></i>
+            <input 
+              type="text" 
+              id="trackSearchInput"
+              placeholder="What do you want to play?" 
+              oninput="handleSearch(this.value)"
+              class="w-64 md:w-80 bg-[#242424] hover:bg-[#2a2a2a] focus:bg-[#2a2a2a] text-xs text-white rounded-full pl-9 pr-4 py-2.5 outline-none focus:ring-2 focus:ring-white transition-all placeholder:text-lootify-subtext font-medium"
+            >
+          </div>
+        </div>
+
+        <!-- User Controls -->
+        <div class="flex items-center gap-3">
+          <button onclick="showToast('Lootify Premium activated!')" class="hidden md:inline-block bg-white hover:scale-105 text-black font-bold text-xs px-4 py-2 rounded-full transition-transform active:scale-95 shadow">
+            Explore Premium
+          </button>
+          <button onclick="toggleAudioPreview()" id="audioMuteBtn" class="bg-black/60 hover:bg-black p-2 rounded-full text-xs font-bold flex items-center gap-1.5 border border-white/10">
+            <i data-lucide="volume-2" class="w-4 h-4 text-lootify-green"></i>
+            <span class="text-[11px] hidden sm:inline">Audio Preview: ON</span>
+          </button>
+          <div class="w-8 h-8 rounded-full bg-lootify-green text-black font-black flex items-center justify-center text-xs shadow-md">
+            G
+          </div>
+        </div>
+      </header>
+
+      <!-- HERO AMBIENT GRADIENT & GREETING -->
+      <div id="ambientHero" class="p-6 pt-2 bg-gradient-to-b from-indigo-900/60 to-lootify-black transition-colors duration-700 space-y-6">
+        
+        <!-- Greeting Header -->
+        <div class="flex items-center justify-between">
+          <h1 class="text-2xl sm:text-3xl font-black tracking-tight" id="timeGreeting">Good evening</h1>
+          <span class="text-xs font-semibold text-lootify-subtext">Reverse-Engineered with App Reverse Engineer</span>
+        </div>
+
+        <!-- 6-CARD QUICK ACCESS GRID -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="quickGrid">
+          <!-- Injected via JavaScript -->
+        </div>
+
+        <!-- SHELF 1: MADE FOR YOU -->
+        <div class="space-y-4 pt-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-bold text-white hover:underline cursor-pointer">Made For You</h2>
+            <span class="text-xs font-bold text-lootify-subtext hover:underline cursor-pointer">Show all</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4" id="madeForYouGrid">
+            <!-- Injected via JavaScript -->
+          </div>
+        </div>
+
+        <!-- SHELF 2: TODAY'S BIGGEST HITS -->
+        <div class="space-y-4 pt-4 pb-12">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-bold text-white hover:underline cursor-pointer">Trending on Lootify</h2>
+            <span class="text-xs font-bold text-lootify-subtext hover:underline cursor-pointer">Show all</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4" id="trendingGrid">
+            <!-- Injected via JavaScript -->
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ==================== BOTTOM STICKY PLAYER ==================== -->
+  <footer class="bg-black border-t border-lootify-border px-4 py-3 flex items-center justify-between gap-4 z-40 select-none">
+    
+    <!-- Left: Track Details -->
+    <div class="flex items-center gap-3.5 w-1/4 min-w-[180px]">
+      <div class="relative w-14 h-14 rounded overflow-hidden flex-shrink-0 bg-neutral-800 shadow">
+        <img id="playerAlbumArt" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=200&q=80" alt="Album" class="w-full h-full object-cover">
+        <!-- Visualizer Bar Overlay when playing -->
+        <div id="visualizerBars" class="absolute inset-0 bg-black/40 flex items-center justify-center gap-0.5">
+          <div class="w-1 bg-lootify-green wave-bar"></div>
+          <div class="w-1 bg-lootify-green wave-bar"></div>
+          <div class="w-1 bg-lootify-green wave-bar"></div>
+          <div class="w-1 bg-lootify-green wave-bar"></div>
+        </div>
+      </div>
+      <div class="overflow-hidden">
+        <div id="playerTrackTitle" class="text-xs sm:text-sm font-bold text-white hover:underline cursor-pointer truncate">
+          Midnight Horizons
+        </div>
+        <div id="playerTrackArtist" class="text-[11px] text-lootify-subtext hover:underline cursor-pointer truncate">
+          Lootify Chillwaves
+        </div>
+      </div>
+      <button onclick="toggleLikeCurrent()" id="playerLikeBtn" class="text-lootify-subtext hover:text-white transition-colors p-1">
+        <i data-lucide="heart" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <!-- Center: Playback Controls & Progress -->
+    <div class="flex flex-col items-center gap-1.5 w-2/4 max-w-xl">
+      <!-- Buttons -->
+      <div class="flex items-center gap-4 sm:gap-6">
+        <button onclick="toggleShuffle()" id="shuffleBtn" class="text-lootify-subtext hover:text-white transition-colors">
+          <i data-lucide="shuffle" class="w-4 h-4"></i>
+        </button>
+        <button onclick="prevTrack()" class="text-lootify-subtext hover:text-white transition-colors">
+          <i data-lucide="skip-back" class="w-5 h-5 fill-current"></i>
+        </button>
+        <button onclick="togglePlayPause()" id="mainPlayPauseBtn" class="w-9 h-9 rounded-full bg-white hover:scale-105 active:scale-95 text-black flex items-center justify-center transition-transform shadow-lg">
+          <i data-lucide="play" class="w-5 h-5 fill-black ml-0.5" id="mainPlayIcon"></i>
+        </button>
+        <button onclick="nextTrack()" class="text-lootify-subtext hover:text-white transition-colors">
+          <i data-lucide="skip-forward" class="w-5 h-5 fill-current"></i>
+        </button>
+        <button onclick="toggleRepeat()" id="repeatBtn" class="text-lootify-subtext hover:text-white transition-colors">
+          <i data-lucide="repeat" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Scrubber Timeline -->
+      <div class="w-full flex items-center gap-2 text-[11px] text-lootify-subtext font-mono">
+        <span id="currentTimeLabel">0:00</span>
+        <div class="flex-1 h-1 bg-white/20 hover:h-1.5 rounded-full relative cursor-pointer group" onclick="seekTrack(event)">
+          <div id="progressBarFill" class="h-full bg-white group-hover:bg-lootify-green rounded-full relative transition-all" style="width: 0%;">
+            <div class="opacity-0 group-hover:opacity-100 absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow"></div>
+          </div>
+        </div>
+        <span id="durationLabel">3:24</span>
+      </div>
+    </div>
+
+    <!-- Right: Volume & Queue Tools -->
+    <div class="flex items-center justify-end gap-3 w-1/4 min-w-[160px] text-lootify-subtext">
+      <button onclick="toggleQueueModal()" class="hover:text-white transition-colors p-1" title="Queue">
+        <i data-lucide="list-music" class="w-4 h-4"></i>
+      </button>
+      <button onclick="showToast('Connected to Lootify Web Speaker')" class="hover:text-white transition-colors p-1" title="Connect to device">
+        <i data-lucide="speaker" class="w-4 h-4"></i>
+      </button>
+      <!-- Volume Slider -->
+      <div class="flex items-center gap-2 w-24">
+        <button onclick="toggleVolumeMute()" id="volIconBtn" class="hover:text-white">
+          <i data-lucide="volume-2" class="w-4 h-4"></i>
+        </button>
+        <div class="flex-1 h-1 bg-white/20 hover:h-1.5 rounded-full relative cursor-pointer group" onclick="setVolume(event)">
+          <div id="volumeBarFill" class="h-full bg-white group-hover:bg-lootify-green rounded-full relative transition-all" style="width: 75%;">
+            <div class="opacity-0 group-hover:opacity-100 absolute right-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-white rounded-full shadow"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- ==================== QUEUE DRAWER MODAL ==================== -->
+  <div id="queueModal" class="fixed right-4 bottom-24 w-80 bg-lootify-card rounded-xl p-4 shadow-2xl border border-lootify-border z-50 hidden flex-col max-h-96">
+    <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
+      <h3 class="font-bold text-sm">Play Queue</h3>
+      <button onclick="toggleQueueModal()" class="text-lootify-subtext hover:text-white">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+    <div id="queueList" class="flex-1 overflow-y-auto space-y-2 text-xs">
+      <!-- Injected via JavaScript -->
+    </div>
+  </div>
+
+  <!-- ==================== TOAST NOTIFICATION ==================== -->
+  <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 bg-lootify-green text-black font-bold text-xs px-4 py-2 rounded-full shadow-2xl pointer-events-none opacity-0 transition-opacity duration-300 z-50 flex items-center gap-1.5">
+    <i data-lucide="check" class="w-4 h-4"></i>
+    <span id="toastMsg">Action complete</span>
+  </div>
+
+  <!-- ==================== JAVASCRIPT LOGIC & AUDIO SYNTH ==================== -->
+  <script>
+    // Catalog of Tracks
+    const TRACKS = [
+      {
+        id: 1,
+        title: "Midnight Horizons",
+        artist: "Lootify Chillwaves",
+        album: "Neon Dreams",
+        duration: 204, // 3:24
+        cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=400&q=80",
+        color: "from-purple-900/60",
+        freq: 440 // A4
+      },
+      {
+        id: 2,
+        title: "Sahara Sunset Glow",
+        artist: "Dune Acoustic",
+        album: "Golden Sands",
+        duration: 188, // 3:08
+        cover: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=400&q=80",
+        color: "from-amber-900/60",
+        freq: 523.25 // C5
+      },
+      {
+        id: 3,
+        title: "Cybernetic Pulse",
+        artist: "Tokyo Synth Lab",
+        album: "Future Echoes",
+        duration: 230, // 3:50
+        cover: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=400&q=80",
+        color: "from-cyan-900/60",
+        freq: 392 // G4
+      },
+      {
+        id: 4,
+        title: "Deep Focus Ambient",
+        artist: "Brainflow Audio",
+        album: "Cognitive State",
+        duration: 280, // 4:40
+        cover: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=400&q=80",
+        color: "from-emerald-900/60",
+        freq: 329.63 // E4
+      },
+      {
+        id: 5,
+        title: "Urban Midnight Drive",
+        artist: "Veloce Beats",
+        album: "Late Night City",
+        duration: 215, // 3:35
+        cover: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=400&q=80",
+        color: "from-blue-900/60",
+        freq: 493.88 // B4
+      },
+      {
+        id: 6,
+        title: "Coffeehouse Acoustic",
+        artist: "Maya & The Strings",
+        album: "Morning Mugs",
+        duration: 175, // 2:55
+        cover: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=400&q=80",
+        color: "from-orange-950/60",
+        freq: 587.33 // D5
+      }
+    ];
+
+    const PLAYLISTS = [
+      { name: "Today's Top Hits", type: "Playlist • Lootify", icon: "music" },
+      { name: "Chill Lofi Beats", type: "Playlist • 840k likes", icon: "coffee" },
+      { name: "Deep Focus Electronic", type: "Playlist • 1.2M likes", icon: "zap" },
+      { name: "All-Out 2000s", type: "Playlist • Throwback", icon: "disc" },
+      { name: "Liked Songs", type: "Playlist • 42 songs", icon: "heart", isLiked: true }
+    ];
+
+    // State
+    let currentTrackIndex = 0;
+    let isPlaying = false;
+    let currentSeconds = 0;
+    let isShuffle = false;
+    let isRepeat = false;
+    let likedTrackIds = new Set([1, 3]);
+    let audioPreviewEnabled = true;
+    let audioCtx = null;
+    let oscillator = null;
+    let gainNode = null;
+    let timerInterval = null;
+
+    // Initialize Web Audio Synth for ambient sound preview
+    function initSynth() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!audioCtx) {
+          audioCtx = new AudioContext();
+        }
+      } catch (e) {
+        console.warn("Web Audio not supported", e);
+      }
+    }
+
+    function startSynthSound(freq) {
+      if (!audioPreviewEnabled || !audioCtx) return;
+      try {
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        stopSynthSound();
+        oscillator = audioCtx.createOscillator();
+        gainNode = audioCtx.createGain();
+
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(freq || 440, audioCtx.currentTime);
+
+        // Gentle volume envelope
+        gainNode.gain.setValueAtTime(0.001, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.04, audioCtx.currentTime + 0.3);
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        oscillator.start();
+      } catch (e) {}
+    }
+
+    function stopSynthSound() {
+      try {
+        if (oscillator) {
+          oscillator.stop();
+          oscillator.disconnect();
+          oscillator = null;
+        }
+      } catch (e) {}
+    }
+
+    function toggleAudioPreview() {
+      audioPreviewEnabled = !audioPreviewEnabled;
+      const btn = document.getElementById('audioMuteBtn');
+      if (audioPreviewEnabled) {
+        btn.innerHTML = `<i data-lucide="volume-2" class="w-4 h-4 text-lootify-green"></i><span class="text-[11px] hidden sm:inline">Audio Preview: ON</span>`;
+        if (isPlaying) startSynthSound(TRACKS[currentTrackIndex].freq);
+        showToast("Audio Synth Sound: ON");
+      } else {
+        btn.innerHTML = `<i data-lucide="volume-x" class="w-4 h-4 text-gray-400"></i><span class="text-[11px] hidden sm:inline">Audio Preview: MUTED</span>`;
+        stopSynthSound();
+        showToast("Audio Synth Sound: MUTED");
+      }
+      lucide.createIcons();
+    }
+
+    // Playback Logic
+    function playTrackAtIndex(idx) {
+      initSynth();
+      currentTrackIndex = idx;
+      currentSeconds = 0;
+      isPlaying = true;
+      updatePlayerUI();
+      startPlaybackTimer();
+      startSynthSound(TRACKS[currentTrackIndex].freq);
+      showToast(`Playing "${TRACKS[idx].title}"`);
+    }
+
+    function togglePlayPause() {
+      initSynth();
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        startPlaybackTimer();
+        startSynthSound(TRACKS[currentTrackIndex].freq);
+      } else {
+        clearInterval(timerInterval);
+        stopSynthSound();
+      }
+      updatePlayerUI();
+    }
+
+    function nextTrack() {
+      if (isShuffle) {
+        currentTrackIndex = Math.floor(Math.random() * TRACKS.length);
+      } else {
+        currentTrackIndex = (currentTrackIndex + 1) % TRACKS.length;
+      }
+      playTrackAtIndex(currentTrackIndex);
+    }
+
+    function prevTrack() {
+      currentTrackIndex = (currentTrackIndex - 1 + TRACKS.length) % TRACKS.length;
+      playTrackAtIndex(currentTrackIndex);
+    }
+
+    function startPlaybackTimer() {
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (!isPlaying) return;
+        currentSeconds++;
+        const total = TRACKS[currentTrackIndex].duration;
+        if (currentSeconds >= total) {
+          if (isRepeat) {
+            currentSeconds = 0;
+          } else {
+            nextTrack();
+            return;
+          }
+        }
+        updateProgressBar();
+      }, 1000);
+    }
+
+    function updateProgressBar() {
+      const total = TRACKS[currentTrackIndex].duration;
+      const pct = (currentSeconds / total) * 100;
+      document.getElementById('progressBarFill').style.width = `${pct}%`;
+      document.getElementById('currentTimeLabel').textContent = formatTime(currentSeconds);
+      document.getElementById('durationLabel').textContent = formatTime(total);
+    }
+
+    function seekTrack(event) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      const clickX = event.clientX - rect.left;
+      const width = rect.width;
+      const pct = Math.max(0, Math.min(1, clickX / width));
+      currentSeconds = Math.floor(pct * TRACKS[currentTrackIndex].duration);
+      updateProgressBar();
+    }
+
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = String(sec % 60).padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    function updatePlayerUI() {
+      const track = TRACKS[currentTrackIndex];
+      document.getElementById('playerAlbumArt').src = track.cover;
+      document.getElementById('playerTrackTitle').textContent = track.title;
+      document.getElementById('playerTrackArtist').textContent = track.artist;
+
+      const hero = document.getElementById('ambientHero');
+      hero.className = `p-6 pt-2 bg-gradient-to-b ${track.color} to-lootify-black transition-colors duration-700 space-y-6`;
+
+      // Play/Pause icon in bottom bar
+      const playIcon = document.getElementById('mainPlayIcon');
+      if (isPlaying) {
+        playIcon.setAttribute('data-lucide', 'pause');
+        playIcon.classList.remove('ml-0.5');
+        document.getElementById('visualizerBars').classList.remove('hidden');
+      } else {
+        playIcon.setAttribute('data-lucide', 'play');
+        playIcon.classList.add('ml-0.5');
+        document.getElementById('visualizerBars').classList.add('hidden');
+      }
+
+      // Heart like state
+      const isLiked = likedTrackIds.has(track.id);
+      const likeBtn = document.getElementById('playerLikeBtn');
+      if (isLiked) {
+        likeBtn.innerHTML = `<i data-lucide="heart" class="w-4 h-4 fill-lootify-green text-lootify-green"></i>`;
+      } else {
+        likeBtn.innerHTML = `<i data-lucide="heart" class="w-4 h-4 text-lootify-subtext"></i>`;
+      }
+
+      updateProgressBar();
+      renderQueue();
+      lucide.createIcons();
+    }
+
+    function toggleLikeCurrent() {
+      const track = TRACKS[currentTrackIndex];
+      if (likedTrackIds.has(track.id)) {
+        likedTrackIds.delete(track.id);
+        showToast(`Removed from Liked Songs`);
+      } else {
+        likedTrackIds.add(track.id);
+        showToast(`Added to Liked Songs`);
+      }
+      updatePlayerUI();
+    }
+
+    function toggleShuffle() {
+      isShuffle = !isShuffle;
+      const btn = document.getElementById('shuffleBtn');
+      btn.className = isShuffle ? 'text-lootify-green font-bold' : 'text-lootify-subtext hover:text-white';
+      showToast(isShuffle ? 'Shuffle is ON' : 'Shuffle is OFF');
+    }
+
+    function toggleRepeat() {
+      isRepeat = !isRepeat;
+      const btn = document.getElementById('repeatBtn');
+      btn.className = isRepeat ? 'text-lootify-green font-bold' : 'text-lootify-subtext hover:text-white';
+      showToast(isRepeat ? 'Repeat is ON' : 'Repeat is OFF');
+    }
+
+    // Render Side Library
+    function renderLibrary() {
+      const container = document.getElementById('libraryList');
+      container.innerHTML = PLAYLISTS.map(p => `
+        <div onclick="showToast('Opened ${p.name}')" class="flex items-center gap-3 p-2 rounded-md hover:bg-white/5 cursor-pointer group transition-colors">
+          <div class="w-11 h-11 rounded flex items-center justify-center ${p.isLiked ? 'bg-gradient-to-br from-indigo-700 to-sky-400 text-white' : 'bg-neutral-800 text-lootify-subtext group-hover:text-white'}">
+            <i data-lucide="${p.icon}" class="w-5 h-5 ${p.isLiked ? 'fill-white' : ''}"></i>
+          </div>
+          <div class="overflow-hidden">
+            <h4 class="text-xs font-semibold text-white truncate">${p.name}</h4>
+            <p class="text-[11px] text-lootify-subtext truncate">${p.type}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Render 6-Item Quick Access Grid
+    function renderQuickGrid() {
+      const container = document.getElementById('quickGrid');
+      container.innerHTML = TRACKS.slice(0, 6).map((t, idx) => `
+        <div onclick="playTrackAtIndex(${idx})" class="flex items-center bg-white/10 hover:bg-white/20 rounded overflow-hidden group cursor-pointer transition-colors shadow">
+          <img src="${t.cover}" alt="${t.title}" class="w-16 h-16 object-cover flex-shrink-0">
+          <div class="px-3.5 flex-1 font-bold text-xs truncate">${t.title}</div>
+          <div class="pr-3">
+            <button class="w-10 h-10 rounded-full bg-lootify-green text-black flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-1 group-hover:translate-y-0 transition-all shadow-lg hover:scale-105 active:scale-95">
+              <i data-lucide="play" class="w-5 h-5 fill-black ml-0.5"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Render Card Shelves
+    function renderShelves() {
+      const shelf1 = document.getElementById('madeForYouGrid');
+      const shelf2 = document.getElementById('trendingGrid');
+
+      shelf1.innerHTML = TRACKS.map((t, idx) => `
+        <div onclick="playTrackAtIndex(${idx})" class="bg-lootify-card hover:bg-lootify-cardHover p-3.5 rounded-lg cursor-pointer group transition-all duration-200">
+          <div class="aspect-square relative rounded-md overflow-hidden mb-3 shadow-md">
+            <img src="${t.cover}" alt="${t.title}" class="w-full h-full object-cover">
+            <button class="absolute bottom-2 right-2 w-10 h-10 rounded-full bg-lootify-green text-black flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all shadow-xl hover:scale-105 active:scale-95">
+              <i data-lucide="play" class="w-5 h-5 fill-black ml-0.5"></i>
+            </button>
+          </div>
+          <h3 class="font-bold text-xs text-white truncate mb-1">${t.title}</h3>
+          <p class="text-[11px] text-lootify-subtext line-clamp-2 leading-tight">${t.artist} • ${t.album}</p>
+        </div>
+      `).join('');
+
+      shelf2.innerHTML = [...TRACKS].reverse().map((t, idx) => `
+        <div onclick="playTrackAtIndex(${TRACKS.length - 1 - idx})" class="bg-lootify-card hover:bg-lootify-cardHover p-3.5 rounded-lg cursor-pointer group transition-all duration-200">
+          <div class="aspect-square relative rounded-md overflow-hidden mb-3 shadow-md">
+            <img src="${t.cover}" alt="${t.title}" class="w-full h-full object-cover">
+            <button class="absolute bottom-2 right-2 w-10 h-10 rounded-full bg-lootify-green text-black flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all shadow-xl hover:scale-105 active:scale-95">
+              <i data-lucide="play" class="w-5 h-5 fill-black ml-0.5"></i>
+            </button>
+          </div>
+          <h3 class="font-bold text-xs text-white truncate mb-1">${t.title}</h3>
+          <p class="text-[11px] text-lootify-subtext line-clamp-2 leading-tight">${t.artist}</p>
+        </div>
+      `).join('');
+    }
+
+    // Render Queue Modal
+    function renderQueue() {
+      const q = document.getElementById('queueList');
+      const upcoming = TRACKS.filter((_, i) => i !== currentTrackIndex);
+      q.innerHTML = `
+        <div class="font-bold text-lootify-green mb-1 text-[11px]">NOW PLAYING:</div>
+        <div class="flex items-center gap-2 p-1.5 bg-white/5 rounded font-bold text-white">
+          <span>▶ ${TRACKS[currentTrackIndex].title}</span>
+        </div>
+        <div class="font-bold text-lootify-subtext pt-2 text-[11px]">NEXT IN QUEUE:</div>
+        ${upcoming.map(u => `
+          <div onclick="playTrackAtIndex(${TRACKS.findIndex(t => t.id === u.id)})" class="flex items-center justify-between p-1.5 hover:bg-white/5 rounded cursor-pointer">
+            <span class="truncate">${u.title}</span>
+            <span class="text-lootify-subtext text-[10px]">${u.artist}</span>
+          </div>
+        `).join('')}
+      `;
+    }
+
+    function toggleQueueModal() {
+      document.getElementById('queueModal').classList.toggle('hidden');
+    }
+
+    // Search Handler
+    function handleSearch(q) {
+      if (!q) {
+        renderQuickGrid();
+        renderShelves();
+        return;
+      }
+      const query = q.toLowerCase();
+      const matches = TRACKS.filter(t => t.title.toLowerCase().includes(query) || t.artist.toLowerCase().includes(query) || t.album.toLowerCase().includes(query));
+
+      const shelf1 = document.getElementById('madeForYouGrid');
+      shelf1.innerHTML = matches.map((t, idx) => `
+        <div onclick="playTrackAtIndex(${TRACKS.findIndex(item => item.id === t.id)})" class="bg-lootify-card hover:bg-lootify-cardHover p-3 rounded-lg cursor-pointer">
+          <img src="${t.cover}" class="aspect-square w-full object-cover rounded mb-2">
+          <div class="font-bold text-xs truncate">${t.title}</div>
+          <div class="text-[11px] text-lootify-subtext truncate">${t.artist}</div>
+        </div>
+      `).join('');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      t.classList.remove('opacity-0');
+      setTimeout(() => t.classList.add('opacity-0'), 2200);
+    }
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      renderLibrary();
+      renderQuickGrid();
+      renderShelves();
+      updatePlayerUI();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

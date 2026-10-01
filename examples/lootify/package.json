@@ -1,0 +1,11 @@
+{
+  "name": "lootify",
+  "version": "1.0.0",
+  "description": "High-fidelity reverse-engineered music streaming player inspired by Spotify, branded as Lootify.",
+  "scripts": {
+    "start": "npx serve -l 3001 ."
+  },
+  "keywords": ["spotify-clone", "lootify", "music-player", "tailwind"],
+  "author": "Opbagya",
+  "license": "MIT"
+}

@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="./assets/banner.jpg" alt="App Reverse Engineer Banner" width="100%" />
+  <img src="./assets/banner.jpg" alt="App Reverse Engineer 3-Step Flow Banner" width="100%" />
 </p>
 
 <h1 align="center">App Reverse Engineer</h1>
 
 <p align="center">
-  <strong>Autonomous AI skill to deconstruct any app, webapp, website, or APK — extracting its UI/UX, tokens, and animations to build your idea.</strong>
+  <strong>Tell the AI any app name. It looks up the app online, steals its visual DNA, and builds your dream idea.</strong>
 </p>
 
 <p align="center">
@@ -13,163 +13,134 @@
   <a href="https://github.com/Opbagya/app-reverse-engineer/stargazers"><img src="https://img.shields.io/github/stars/Opbagya/app-reverse-engineer.svg?style=flat" alt="GitHub stars" /></a>
   <a href="https://github.com/Opbagya/app-reverse-engineer/issues"><img src="https://img.shields.io/github/issues/Opbagya/app-reverse-engineer.svg" alt="Issues" /></a>
   <a href="https://github.com/Opbagya/app-reverse-engineer/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome" /></a>
-  <img src="https://img.shields.io/badge/Agent-Antigravity%20%7C%20Claude%20%7C%20Cursor-purple.svg" alt="Platform Support" />
 </p>
 
 <p align="center">
   <a href="https://opbagya.github.io/app-reverse-engineer/">
-    <img src="https://img.shields.io/badge/Live%20Demo-Try%20Sahara%20Web-orange?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Demo" />
+    <img src="https://img.shields.io/badge/Live%20Demo%201-Try%20Sahara%20(Amazon)-orange?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Demo Sahara" />
+  </a>
+  &nbsp;
+  <a href="https://opbagya.github.io/app-reverse-engineer/lootify/">
+    <img src="https://img.shields.io/badge/Live%20Demo%202-Try%20Lootify%20(Spotify)-1ed760?style=for-the-badge&logo=spotify&logoColor=white" alt="Live Demo Lootify" />
   </a>
 </p>
 
 ---
 
-## ⚡ Overview
+## 👶 Explain Like I'm 10 (ELI10)
 
-When building with AI coding assistants, code tokens alone are not enough. Without seeing actual screens, LLMs hallucinate generic "AI slop" or ask you to manually upload files.
+> **Imagine you want to build a cool toy castle, but you love the color and towers of Disneyland's castle.**
+> 
+> Normally, an AI asks you: *"Please send me 20 photos of Disneyland, upload the blueprints, and tell me the exact color codes."* That's tiring!
+> 
+> With **App Reverse Engineer**, you just say:
+> > *"Build my castle, but give it the vibe of Disneyland."*
+> 
+> You **do NOT need to take screenshots**. You **do NOT need to download any APK files**.
+> 
+> The AI goes onto the internet by itself, finds Disneyland's pictures, examines the towers and colors with its own eyes, and builds your custom castle right in front of you in seconds.
 
-**App Reverse Engineer** solves this with an **end-to-end autonomous reverse-engineering pipeline**:
-1. **Zero-Upload Discovery**: Give it any app or website name (e.g., *Linear, Spotify, Revolut, Duolingo, Amazon*). The agent automatically pulls high-res device screenshots from App Store CDNs, inspects live webapps, and audits GitHub codebases on its own.
-2. **Mandatory Visual Inspection**: The agent passes screenshots to its multimodal vision model to inspect optical whitespace, contrast, and layout balance before writing code.
-3. **5-Point Deconstruction Matrix**: Extracts exact color palettes, typography scales, corner radii, component shells, and physical spring animation curves into a portable `DESIGN_SYSTEM.md`.
-4. **The Remix Engine**: Transposes that aesthetic DNA into your custom product idea without creating a cheap 1:1 copy.
+---
+
+## 🚫 No Screenshots or Files Needed
+
+* ❌ **No APK files to download or upload**
+* ❌ **No iOS screenshots to take**
+* ❌ **No CSS files or color codes to copy-paste**
+
+**How it works:** You only type the **app name** (e.g. *Spotify, Amazon, Linear, Duolingo, Uber*). The AI automatically hunts down the app on Google Play, the App Store, and live websites, downloads real screenshots in the background, looks at them with computer vision, and starts coding.
 
 ---
 
 ## 🚀 Quick Install
 
-### 1-Line Installer (Recommended)
+### 1-Line Terminal Install (Recommended)
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Opbagya/app-reverse-engineer/main/skill.sh | bash
 ```
 
-### Manual Installation
-
-#### Google Antigravity & Gemini CLI
-Clone directly into your global configuration:
-```bash
-mkdir -p ~/.gemini/config/skills/app-reverse-engineer
-curl -sSL https://raw.githubusercontent.com/Opbagya/app-reverse-engineer/main/skills/app-reverse-engineer/SKILL.md -o ~/.gemini/config/skills/app-reverse-engineer/SKILL.md
-```
-
-#### Claude Code, Cursor, or Windsurf
-Copy [`skills/app-reverse-engineer/SKILL.md`](./skills/app-reverse-engineer/SKILL.md) into your project's `.cursorrules`, `.claude/skills/`, or agent system instructions.
+### Or Use with Any AI Tool
+* **Google Antigravity / Gemini CLI**: Install directly into `~/.gemini/config/skills/app-reverse-engineer/`.
+* **Claude Code, Cursor, or Windsurf**: Copy the contents of [`skills/app-reverse-engineer/SKILL.md`](./skills/app-reverse-engineer/SKILL.md) into your project's rules or prompt.
 
 ---
 
-## 💡 How to Use
+## 💬 How to Use It
 
-In your coding assistant, simply run:
+In your AI chat, simply say:
 
 ```text
 Use app-reverse-engineer on [App Name] to build [Your Idea]
 ```
 
-### Natural Language Examples
-* *"Reverse engineer the UI/UX of Linear and build a minimalist Deal Pipeline CRM for real estate agents."*
-* *"Deconstruct Duolingo's gamified mobile UX and build a coding practice app."*
-* *"Extract the design and animations of Spotify to create a podcast learning tool."*
+### Examples:
+* *"Use app-reverse-engineer on Spotify to build Lootify, a music streaming player for indie artists."*
+* *"Use app-reverse-engineer on Amazon to build Sahara, an e-commerce marketplace."*
+* *"Use app-reverse-engineer on Linear to build a high-speed bug tracker for game developers."*
 
 ---
 
-## 🔍 How the Pipeline Works
+## 🌟 Live Proof: See What 1 Sentence Can Build
 
-```
-You name an app (e.g. "Linear", "Amazon", "Revolut")
-                         │
-                         ▼
-┌────────────────────────────────────────────────────────┐
-│  Phase 1: Autonomous Ingestion (Zero-Upload)           │
-│  • App Store & Google Play CDNs (mzstatic, etc.)       │
-│  • Automated Web Page & PWA Viewport Capture           │
-│  • GitHub Engineering Clones & Storybook Tokens        │
-│  • Direct APK Decompression (if local file supplied)   │
-└────────────────────────┬───────────────────────────────┘
-                         │
-                         ▼
-┌────────────────────────────────────────────────────────┐
-│  Phase 2: Multimodal Vision Inspection                 │
-│  The vision model inspects real screenshots:           │
-│  • Optical whitespace, padding & layout density        │
-│  • Visual hierarchy & font contrast                    │
-│  • Radii, glassmorphism, and shadow depths             │
-└────────────────────────┬───────────────────────────────┘
-                         │
-                         ▼
-┌────────────────────────────────────────────────────────┐
-│  Phase 3: The 5-Point Deconstruction Matrix            │
-│  1. Visual Theme & Tokens (palette, fonts, radii)      │
-│  2. Component Anatomy (nav, cards, bottom sheets)      │
-│  3. Motion & Micro-Interactions (springs, gestures)    │
-│  4. UX Architecture & Cognitive Flow                   │
-│  5. Micro-Copy & Tone of Voice                         │
-└────────────────────────┬───────────────────────────────┘
-                         │
-                         ▼
-┌────────────────────────────────────────────────────────┐
-│  Phase 4: Transposition & Production Build             │
-│  • Outputs portable DESIGN_SYSTEM.md                   │
-│  • Generates complete, functional Next.js/React or     │
-│    React Native/Expo code matching the design DNA      │
-└────────────────────────────────────────────────────────┘
-```
+Here are two complete, production-grade web applications built with **just one sentence each**:
+
+### Demonstration 1: "Sahara" (Amazon Reverse-Engineered)
+👉 **[Click Here to Test the Live Sahara Webapp](https://opbagya.github.io/app-reverse-engineer/)**
+
+* **The Prompt:**
+  ```text
+  using this skill of app reverse engineer, build me exact copy of amazon but name it "sahara"
+  ```
+* **What the AI Did Autonomously:**
+  1. Found Amazon's official App Store screenshots online.
+  2. Extracted the exact navy (`#131921`), gold (`#febd69`), and deal red (`#cc0c39`) tokens.
+  3. Built an interactive e-commerce store with omnibox search, 4-quadrant bento cards, countdown deals, a working shopping cart, and a floating **Dune AI** shopping assistant.
+* **Code folder:** [`examples/sahara/`](./examples/sahara/)
 
 ---
 
-## 🌟 Live Demonstration: "Sahara" (Amazon Reverse-Engineered)
+### Demonstration 2: "Lootify" (Spotify Reverse-Engineered)
+👉 **[Click Here to Test the Live Lootify Webapp](https://opbagya.github.io/app-reverse-engineer/lootify/)**
 
-See [`examples/sahara`](./examples/sahara/) for a complete working showcase built with a single prompt.
-
-### The Input Prompt
-```text
-using this skill of app reverse engineer, build me exact copy of amazon but name it "sahara"
-```
-
-### What Was Built Autonomously:
-* 📸 **App Store CDN Scrape**: Scraped and visually inspected modern Amazon mobile screenshots (pill omnibox, quick category chips, 2x2 quadrant cards, and Rufus AI assistant).
-* 📐 **[`DESIGN_SYSTEM.md`](./examples/sahara/DESIGN_SYSTEM.md)**: Reverse-engineered exact hex tokens (`#131921` Navy, `#232f3e` Slate, `#febd69` Gold, `#eaeded` Canvas, `#cc0c39` Deal Red).
-* 💻 **[`index.html`](./examples/sahara/index.html)**: Complete, interactive e-commerce platform with:
-  * Custom SVG **sahara** logo with the iconic golden curved smile swoosh arrow.
-  * Omnibox Search with department select, live autocomplete, and real catalog filtering.
-  * Rotating Hero Banner with Amazon's signature bottom-fade gradient mask.
-  * 4-Quadrant Category Bento cards ("Gaming Accessories", "Refresh your space", "Artisan Home").
-  * Horizontal Deals Carousel with a live countdown timer (`07:42:19`) and quick-add buttons.
-  * Slide-over Shopping Cart with numeric badge counter, quantity toggles, and subtotal calculation.
-  * **Dune AI Assistant** (Inspired by Amazon's Rufus AI) offering real conversational shopping guidance!
+* **The Prompt:**
+  ```text
+  using this skill of app reverse engineer, build me exact copy of spotify but name it "lootify"
+  ```
+* **What the AI Did Autonomously:**
+  1. Found Spotify's official mobile screenshots on the Play Store CDN.
+  2. Extracted the obsidian black (`#121212`) and neon green (`#1ed760`) design tokens.
+  3. Built a fully interactive dark-mode music player with a left library sidebar, hover-reveal green play buttons, live Web Audio ambient synth sound preview, play queue, and scrubbable progress bar.
+* **Code folder:** [`examples/lootify/`](./examples/lootify/)
 
 ---
 
-## 📂 Repository Structure
+## 🛠️ The 3-Step Magic Under the Hood
 
-```text
-app-reverse-engineer/
-├── .github/
-│   └── FUNDING.yml                  # GitHub Sponsors configuration
-├── assets/
-│   └── banner.jpg                   # Project hero artwork
-├── skills/
-│   └── app-reverse-engineer/
-│       └── SKILL.md                 # Core agent skill instructions
-├── examples/
-│   └── sahara/                      # Complete demonstration project
-│       ├── DESIGN_SYSTEM.md         # Extracted Amazon tokens
-│       ├── index.html               # Working interactive web app
-│       ├── package.json             # Dev server scripts
-│       └── README.md                # Demonstration notes
-├── plugin.json                      # Antigravity/Gemini plugin manifest
-├── skill.sh                         # 1-line installation script
-├── LICENSE                          # MIT License
-└── README.md                        # Project documentation
+```
+1. You Type an App Name (e.g. "Spotify")
+             │
+             ▼
+2. AI Hunts the Web Autonomously
+   • Pulls full-resolution screenshots from App Store & Play Store CDNs
+   • Looks at the screens with multimodal vision (checking whitespace & layouts)
+   • Extracts colors, fonts, card styles, and animations into DESIGN_SYSTEM.md
+             │
+             ▼
+3. AI Builds Your Custom Idea
+   • Generates 100% complete, working code (Next.js, React, or React Native)
+   • Adapts the visual style to your unique product
 ```
 
 ---
 
-## 💖 Sponsoring & Supporting
+## 📬 Connect & Contact
 
-If this skill saved you hours of design and reverse-engineering time, consider [sponsoring the project](https://github.com/sponsors/Opbagya) or starring ⭐ the repository!
+If you have questions, ideas, or want to collaborate:
+* **Email:** [OnkarBagimani@gmail.com](mailto:OnkarBagimani@gmail.com)
+* **GitHub:** [@Opbagya](https://github.com/Opbagya)
 
 ---
 
 ## 📄 License
 
-Distributed under the MIT License. See [`LICENSE`](./LICENSE) for more information.
+This project is licensed under the **MIT License** — you are free to use, modify, and distribute it for personal and commercial projects. See the [`LICENSE`](./LICENSE) file for details.
