@@ -1,0 +1,22 @@
+{
+  "name": "app-reverse-engineer",
+  "description": "Autonomous AI skill to deconstruct any webapp, iOS app, website, or Android APK, analyze its UI/UX, tokens, and animations, and remix its design DNA to build your custom idea.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Opbagya",
+    "url": "https://github.com/Opbagya"
+  },
+  "homepage": "https://github.com/Opbagya/app-reverse-engineer",
+  "repository": "https://github.com/Opbagya/app-reverse-engineer",
+  "license": "MIT",
+  "keywords": [
+    "antigravity",
+    "skills",
+    "reverse-engineer",
+    "ui-ux",
+    "design-tokens",
+    "app-clone",
+    "frontend",
+    "ai-agent"
+  ]
+}
