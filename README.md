@@ -2,10 +2,6 @@
   <img src="./assets/banner.jpg" alt="App Reverse Engineer 3-Step Flow Banner" width="100%" />
 </p>
 
-<p align="center">
-  <img src="./assets/logo.png" alt="App Reverse Engineer Logo" width="88" height="88" />
-</p>
-
 <h1 align="center">App Reverse Engineer</h1>
 
 <p align="center">
@@ -134,6 +130,12 @@ Here are two complete, production-grade web applications built with **just one s
    • Generates 100% complete, working code (Next.js, React, or React Native)
    • Adapts the visual style to your unique product
 ```
+
+---
+
+## 💬 A Note from the Creator
+
+> *"I'm a beginner builder learning in public and building the tools I personally need and use every day. If you try this skill out, I’d love to hear your thoughts, what worked, what didn't, or what you'd like to see next. Feedback, suggestions, and PRs are always warmly welcome!"*
 
 ---
 
