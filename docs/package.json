@@ -1,0 +1,11 @@
+{
+  "name": "sahara",
+  "version": "1.0.0",
+  "description": "High-fidelity reverse-engineered e-commerce experience inspired by Amazon, branded as Sahara.",
+  "scripts": {
+    "start": "npx serve -l 3000 ."
+  },
+  "keywords": ["amazon-clone", "sahara", "e-commerce", "tailwind"],
+  "author": "Antigravity",
+  "license": "MIT"
+}
