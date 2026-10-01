@@ -23,6 +23,10 @@
   <a href="https://opbagya.github.io/app-reverse-engineer/lootify/">
     <img src="https://img.shields.io/badge/Live%20Demo%202-Try%20Lootify%20(Spotify)-1ed760?style=for-the-badge&logo=spotify&logoColor=white" alt="Live Demo Lootify" />
   </a>
+  &nbsp;
+  <a href="https://opbagya.github.io/app-reverse-engineer/instagram/">
+    <img src="https://img.shields.io/badge/Live%20Demo%203-Instagram%20Mobile-e4405f?style=for-the-badge&logo=instagram&logoColor=white" alt="Live Demo Instagram Mobile" />
+  </a>
 </p>
 
 ---
@@ -111,6 +115,27 @@ Here are two complete, production-grade web applications built with **just one s
   2. Extracted the obsidian black (`#121212`) and neon green (`#1ed760`) design tokens.
   3. Built a fully interactive dark-mode music player with a left library sidebar, hover-reveal green play buttons, live Web Audio ambient synth sound preview, play queue, and scrubbable progress bar.
 * **Code folder:** [`examples/lootify/`](./examples/lootify/)
+
+---
+
+### Demonstration 3: Instagram Mobile Experience (App Reverse-Engineered)
+👉 **[Click Here to Test the Live Instagram Mobile Webapp](https://opbagya.github.io/app-reverse-engineer/instagram/)**
+
+* **The Prompt:**
+  ```text
+  how about mobile version, build me instagram using app reverse engineer
+  ```
+* **What the AI Did Autonomously:**
+  1. Pulled high-resolution mobile feed screenshots directly from Apple's App Store CDN.
+  2. Extracted the signature Instagram gradient story ring tokens, AMOLED pitch dark styling, and mobile touch dimensions.
+  3. Built an interactive mobile experience with:
+     - 📱 **iPhone 16 Pro Framing**: Dynamic Island, status bar, and home indicator.
+     - ⭕ **Stories Tray & Viewer**: Tap any friend's story to open a full-screen story viewer with auto-advancing segmented progress bars!
+     - ❤️ **Double-Tap Heart Gesture**: Double-clicking/tapping any photo triggers a floating, bouncing white heart pop animation.
+     - 💬 **Interactive Comments Sheet**: Slide-up bottom drawer to type and post comments.
+     - 🎛️ **Full 4-Tab Navigation**: Home Feed, 3-Column Explore Grid, Full-Height Vertical Reels with spinning audio disc, and User Profile.
+     - 🌓 **Dark / Light Mode**: Smooth toggle between clean white and AMOLED black.
+* **Code folder:** [`examples/instagram-mobile/`](./examples/instagram-mobile/)
 
 ---
 

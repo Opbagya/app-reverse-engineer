@@ -1,0 +1,11 @@
+{
+  "name": "instagram-mobile",
+  "version": "1.0.0",
+  "description": "High-fidelity reverse-engineered Instagram mobile web experience.",
+  "scripts": {
+    "start": "npx serve -l 3002 ."
+  },
+  "keywords": ["instagram", "mobile-app", "stories", "reels", "tailwind"],
+  "author": "Opbagya",
+  "license": "MIT"
+}
